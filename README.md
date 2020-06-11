@@ -1,3 +1,5 @@
+![Apply Terraform Code](https://github.com/arctiqjacob/terraform-google-compute/workflows/Apply%20Terraform%20Code/badge.svg?branch=master)
+
 # terraform-google-compute
 Repository I use to demo Terraform with GitHub Actions.
 
