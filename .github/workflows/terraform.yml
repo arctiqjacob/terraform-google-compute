@@ -45,17 +45,8 @@ jobs:
         TF_VAR_project: ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push' && github.github.head_ref != 'refs/heads/destroy_all'
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform apply -auto-approve
-      env:
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-        TF_VAR_vault_address: ${{ secrets.VAULT_ADDR }}
-        TF_VAR_project: ${{ secrets.GCP_PROJECT_ID }}
-    
-    - name: Terraform Destroy
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push' && github.github.head_ref != 'refs/heads/destroy_all'
-      run: terraform destroy -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
