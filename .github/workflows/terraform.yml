@@ -1,8 +1,10 @@
-name: Validate and Plan Terraform
+name: Apply Terraform Code
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
+  push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -21,25 +23,30 @@ jobs:
       with:
         terraform_version: 0.12.26
     
-    - name: Check Terraform Formatting
-      id: fmt
+    - name: Terraform Format
       run: terraform fmt -check
     
-    - name: Check Terraform Init
-      id: init
+    - name: Terraform Init
       run: terraform init
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-    - name: Validate Terraform Code
-      id: validate
+    - name: Terraform Validate
       run: terraform validate
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     
-    - name: Run Terraform Plan
-      id: plan
+    - name: Terraform Plan
       run: terraform plan
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+        TF_VAR_vault_address: ${{ secrets.VAULT_ADDR }}
+        TF_VAR_project: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: terraform apply -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
