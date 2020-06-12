@@ -28,15 +28,20 @@ jobs:
     - name: Check Terraform Init
       id: init
       run: terraform init
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
     - name: Validate Terraform Code
       id: validate
       run: terraform validate
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     
     - name: Run Terraform Plan
       id: plan
       run: terraform plan
       env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
         TF_VAR_vault_address: ${{ secrets.VAULT_ADDR }}
         TF_VAR_project: ${{ secrets.GCP_PROJECT_ID }}
